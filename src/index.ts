@@ -10,6 +10,8 @@ router.post("/lookup", lookup);
 
 router.post("/slack", message);
 
+router.get("/slack", () => new Response("oh you're trying to reach slack? Yeah not here")));
+
 router.all("*", () => new Response("404, not found!", { status: 404 }))
 
 addEventListener('fetch', (e) => {

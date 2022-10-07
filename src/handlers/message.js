@@ -39,7 +39,7 @@ export default async request => {
 
     return new Response(
       "oh hello" + body.challenge,
-      { ok: true },
+      { status: 200 },
       { headers: { 'Content-type': 'text/plain' }}
     )
 
