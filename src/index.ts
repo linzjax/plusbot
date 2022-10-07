@@ -1,4 +1,5 @@
 import lookup from './handlers/lookup';
+import message from './handlers/message';
 
 import { Router } from 'itty-router';
 
@@ -6,6 +7,8 @@ import { Router } from 'itty-router';
 const router = Router();
 
 router.post("/lookup", lookup);
+
+router.post("/slack", message);
 
 router.all("*", () => new Response("404, not found!", { status: 404 }))
 
