@@ -3,7 +3,7 @@ import qs from 'qs'
 export default async request => {
   try {
     console.log('listen, we are trying our best here')
-    const body = await request.body()
+    const body = await request.body
     // const timestamp = request.headers['X-Slack-Request-Timestamp']
 
     // // make sure time makes sense.
@@ -14,7 +14,7 @@ export default async request => {
 
     // const slackSecret = process.env.SLACK_SIGNING_SECRET
     // const sigBasestring = 'v0:' + timestamp + ':' + body
-    // const slack_signature = request.headers['X-Slack-Signature']
+    const slack_signature = request.headers['X-Slack-Signature']
 
     // // You will need some super-secret data to use as a symmetric key.
     // const encoder = new TextEncoder();
