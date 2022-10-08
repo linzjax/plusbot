@@ -1,12 +1,12 @@
 import qs from 'qs'
 
+
+
 export default async request => {
   try {
     const body = await request.text()
     const params = qs.parse(body)
     const text = params['text'].trim()
-
-    console.log(text)
 
     const blocks = [
       {
