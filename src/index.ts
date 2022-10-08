@@ -1,25 +1,23 @@
-import {Router, listen} from 'worktop';
-import faunadb from 'faunadb';
-import { getFaunaError, getId, getDataField } from './utils';
-import invariant from 'tiny-invariant';
+import { Router, listen } from "worktop"
+import faunadb from "faunadb"
+import { getFaunaError, getId, getDataField } from "./utils"
+import invariant from "tiny-invariant"
 
-
-
-const router = new Router();
+const router = new Router()
 
 const faunaClient = new faunadb.Client({
   // @ts-ignore
   secret: FAUNADB_SECRET as string,
-  domain: 'db.fauna.com',
+  domain: "db.fauna.com"
 })
 
-const q = faunadb.query;
+const q = faunadb.query
 
-router.add('POST', '/plusses', async (request, response) => {
+router.add("POST", "/plusses", async (request, response) => {
   try {
-    const body = await request.body();
+    const body = await request.body()
 
-    invariant(body !== null, 'Body request was empty');
+    invariant(body !== null, "Body request was empty")
 
     /*
 
@@ -40,33 +38,39 @@ router.add('POST', '/plusses', async (request, response) => {
     }
     */
 
-    const result = await faunaClient.query(q.Let({
-      user: q.Get(q.Match(q.Index('plusses_by_user_id'), body.user_id))
-    },
-      q.Update(
-        q.Ref(q.Collection("plusses"), getId("user")),
+    const result = await faunaClient.query(
+      q.Let(
         {
+          user: q.Get(q.Match(q.Index("plusses_by_user_id"), body.user_id))
+        },
+        q.Update(q.Ref(q.Collection("plusses"), getId("user")), {
           data: {
-            plusses: q.Add(getDataField("user", 'plusses'), 1)
+            plusses: q.Add(getDataField("user", "plusses"), 1)
           }
+        })
+      )
+    )
+
+    const userUpdated: { [plusses: string]: number } = await faunaClient.query(
+      q.Let(
+        {
+          u: q.Get(q.Match(q.Index("plusses_by_user_id"), body.user_id))
+        },
+        {
+          plusses: getDataField("u", "plusses")
         }
       )
-    ))
+    )
 
-    const userUpdated: { [plusses: string]: number} = await faunaClient.query(
-      q.Let({
-        u: q.Get(q.Match(q.Index('plusses_by_user_id'), body.user_id))
-    }, {
-      plusses: getDataField("u", "plusses")
-    }))
-
-    response.send(200, `@${body.user_name} now has ${userUpdated.plusses} plusses!`)
-
+    response.send(
+      200,
+      `@${body.user_name} now has ${userUpdated.plusses} plusses!`
+    )
   } catch (error) {
-    const faunaError = getFaunaError(error);
+    const faunaError = getFaunaError(error)
     console.log(faunaError)
-    response.send(faunaError.status, faunaError);
+    response.send(faunaError.status, faunaError)
   }
-});
+})
 
-listen(router.run);
+listen(router.run)

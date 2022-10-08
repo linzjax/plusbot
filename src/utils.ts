@@ -1,30 +1,29 @@
-import { Select, Var } from 'faunadb'
+import { Select, Var } from "faunadb"
 
 export function getFaunaError(error) {
-
-  const { code, description } = error.requestResult.responseContent.errors[0];
-  let status;
+  const { code, description } = error.requestResult.responseContent.errors[0]
+  let status
 
   switch (code) {
-    case 'unauthorized':
-    case 'authentication failed':
-      status = 401;
-      break;
-    case 'permission denied':
-      status = 403;
-      break;
-    case 'instance not found':
-      status = 404;
-      break;
-    case 'instance not unique':
-    case 'contended transaction':
-      status = 409;
-      break;
+    case "unauthorized":
+    case "authentication failed":
+      status = 401
+      break
+    case "permission denied":
+      status = 403
+      break
+    case "instance not found":
+      status = 404
+      break
+    case "instance not unique":
+    case "contended transaction":
+      status = 409
+      break
     default:
-      status = 500;
+      status = 500
   }
 
-  return { code, description, status };
+  return { code, description, status }
 }
 
 export const getId = (variable: string | Expr) => {
@@ -37,6 +36,5 @@ export const getDataField = (
 ) => {
   return Select(["data", field], Var(variable))
 }
-
 
 export default getFaunaError
