@@ -9,24 +9,6 @@ export default (faunaClient) => async (request, response) => {
     invariant(body !== null, "Body request was empty")
 
     const q = faunadb.query
-    /*
-
-    {
-      "token": "uchynaSVwpCsen11gvc4H7kQ",
-      "team_id": "T045JP1N51T",
-      "team_domain": "lindseysappfactory",
-      "channel_id": "C045JP4PWTX",
-      "channel_name": "plusbot",
-      "user_id": "U045MMQ3ZDG",
-      "user_name": "linzjax",
-      "command": "/plusbot",
-      "text": "<@U045MMQ3ZDG|linzjax>"
-      "api_app_id": "A04575DJUDD",
-      "is_enterprise_install": "false",
-      "response_url": "https://hooks.slack.com/commands/T045JP1N51T/4218244674272/Mj3Q5WeLZOjHE34QSn5Kbw4Q",
-      "trigger_id": "4197002111524.4188783753061.cf409fc3a8c3f06a0c44df6f680c5746"
-    }
-    */
 
     const plussesFor = body.text
       .split(" ")
