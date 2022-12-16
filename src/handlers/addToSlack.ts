@@ -5,6 +5,9 @@ const html = `<!DOCTYPE html>
   `
 
 export default async (request, response) => {
-  console.log("is this thing on?")
-  response.end(`well hey there`)
+  return new Response(html, {
+    headers: {
+      "content-type": "text/html;charset=UTF-8"
+    }
+  })
 }
