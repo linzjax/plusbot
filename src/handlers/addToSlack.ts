@@ -4,10 +4,6 @@ const html = `<!DOCTYPE html>
   </body>
   `
 
-export default async (request) => {
-  return new Response(html, {
-    headers: {
-      "content-type": "text/html;charset=UTF-8"
-    }
-  })
+export default async (request, response) => {
+  response.end(`well hey there`)
 }
