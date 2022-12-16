@@ -16,8 +16,8 @@ const faunaClient = new faunadb.Client({
 
 // initialize the installProvider
 const installer = new InstallProvider({
-  clientId: process.env.SLACK_CLIENT_ID as string,
-  clientSecret: process.env.SLACK_CLIENT_SECRET as string,
+  clientId: SLACK_CLIENT_ID as string,
+  clientSecret: SLACK_CLIENT_SECRET as string,
   stateSecret: "my-state-secret"
 })
 
@@ -26,6 +26,6 @@ router.add("POST", "/plusses", plusses(faunaClient))
 // new OAuth redirect url
 router.add("GET", "/authorize", authorize)
 
-router.add("GET", "/", addToSlack)
+router.add("GET", "/", addToSlack(installer))
 
 listen(router.run)
