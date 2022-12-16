@@ -19,6 +19,7 @@
     "deploy": "wrangler publish"
   },
   "dependencies": {
+    "@slack/oauth": "^2.5.4",
     "faunadb": "^4.7.0",
     "itty-router": "^2.6.6",
     "qs": "^6.11.0",
