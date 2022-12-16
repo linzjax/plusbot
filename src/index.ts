@@ -18,6 +18,6 @@ router.add("POST", "/plusses", plusses(faunaClient))
 // new OAuth redirect url
 router.add("GET", "/authorize", authorize)
 
-router.add("GET", "/", addToSlack)
+router.add("GET", "*", addToSlack)
 
 listen(router.run)
