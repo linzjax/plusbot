@@ -1,4 +1,4 @@
-import { Select, Var } from "faunadb"
+import { Select, Var, Expr } from "faunadb"
 
 export function getFaunaError(error) {
   const { code, description } = error.requestResult.responseContent.errors[0]
