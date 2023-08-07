@@ -1,8 +1,5 @@
 import { Router, listen } from "worktop"
 import faunadb from "faunadb"
-import { WebClient } from "@slack/web-api"
-
-const client = new WebClient()
 
 import plusses from "./handlers/plusses"
 import authorize from "./handlers/authorize"
