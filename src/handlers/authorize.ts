@@ -42,9 +42,6 @@ export default async (req, res) => {
     )
   } catch (eek) {
     console.log(eek)
-    res.send(
-      500,
-      `<html><body><p>Something went wrong!</p><p>${eek.logs.message}</p>`
-    )
+    res.send(500, `<html><body><p>Something went wrong!</p><p>${eek}</p>`)
   }
 }
