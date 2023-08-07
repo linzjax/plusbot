@@ -1,8 +1,7 @@
 import SlackREST from "@sagi.io/workers-slack"
 import invariant from "tiny-invariant"
 
-const botAccessToken = SLACK_BOT_ACCESS_TOKEN
-const SlackAPI = new SlackREST({ botAccessToken })
+const SlackAPI = new SlackREST()
 
 export default async (req, res) => {
   invariant(
@@ -22,6 +21,8 @@ export default async (req, res) => {
       client_secret: SLACK_CLIENT_SECRET,
       code: req.query.code
     })
+
+    console.log(response)
 
     invariant(
       response.authed_user !== undefined,
