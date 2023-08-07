@@ -1,7 +1,8 @@
-import { WebClient } from "@slack/web-api"
+import SlackREST from "@sagi.io/workers-slack"
 import invariant from "tiny-invariant"
 
-const client = new WebClient()
+const botAccessToken = SLACK_BOT_ACCESS_TOKEN
+const SlackAPI = new SlackREST({ botAccessToken })
 
 export default async (req, res) => {
   invariant(
@@ -16,7 +17,7 @@ export default async (req, res) => {
   )
 
   try {
-    const response = await client.oauth.v2.access({
+    const response = await SlackAPI.oauth.v2.access({
       client_id: SLACK_CLIENT_ID,
       client_secret: SLACK_CLIENT_SECRET,
       code: req.query.code
@@ -28,7 +29,7 @@ export default async (req, res) => {
       This is necessary to install the app.`
     )
 
-    const identity = await client.users.identity({
+    const identity = await SlackAPI.users.identity({
       token: response.authed_user.access_token
     })
 
@@ -43,7 +44,7 @@ export default async (req, res) => {
     console.log(eek)
     res.send(
       500,
-      `<html><body><p>Something went wrong!</p><p>${JSON.stringify(eek)}</p>`
+      `<html><body><p>Something went wrong!</p><p>${eek.logs.message}</p>`
     )
   }
 }

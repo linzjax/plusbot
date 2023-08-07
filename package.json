@@ -4,7 +4,7 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^3.16.0",
     "@slack/types": "^2.8.0",
-    "@types/node": "^18.8.3",
+    "@types/node": "^18.17.3",
     "eslint": "^8.25.0",
     "prettier": "^2.7.1",
     "typescript": "^4.8.4",
@@ -20,7 +20,7 @@
     "deploy": "wrangler publish"
   },
   "dependencies": {
-    "@slack/web-api": "^6.9.0",
+    "@sagi.io/workers-slack": "^0.0.55",
     "faunadb": "^4.7.0",
     "itty-router": "^2.6.6",
     "qs": "^6.11.0",
