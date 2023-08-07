@@ -17,8 +17,8 @@ export default async (req, res) => {
 
   try {
     const response = await client.oauth.v2.access({
-      client_id: process.env.SLACK_CLIENT_ID,
-      client_secret: process.env.SLACK_CLIENT_SECRET,
+      client_id: SLACK_CLIENT_ID,
+      client_secret: SLACK_CLIENT_SECRET,
       code: req.query.code
     })
 
