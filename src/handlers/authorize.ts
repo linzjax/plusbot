@@ -5,12 +5,12 @@ const client = new WebClient()
 
 export default async (req, res) => {
   invariant(
-    process.env.SLACK_CLIENT_ID !== undefined,
+    SLACK_CLIENT_ID !== undefined,
     `SLACK_CLIENT_ID is missing.\n
     This can be found under Basic Information -> App Credentials in your bot directory.`
   )
   invariant(
-    process.env.SLACK_CLIENT_SECRET !== undefined,
+    SLACK_CLIENT_SECRET !== undefined,
     `SLACK_CLIENT_SECRET is missing.\n
     This can be found under Basic Information -> App Credentials in your bot directory.`
   )
