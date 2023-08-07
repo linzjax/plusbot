@@ -33,19 +33,17 @@ export default async (req, res) => {
     })
 
     // At this point you can assume the user has logged in successfully with their account.
-    res
-      .status(200)
-      .send(
-        `<html><body><p>You have successfully logged in with your slack account! Here are the details:</p><p>Response: ${JSON.stringify(
-          response
-        )}</p><p>Identity: ${JSON.stringify(identity)}</p></body></html>`
-      )
+    res.send(
+      200,
+      `<html><body><p>You have successfully logged in with your slack account! Here are the details:</p><p>Response: ${JSON.stringify(
+        response
+      )}</p><p>Identity: ${JSON.stringify(identity)}</p></body></html>`
+    )
   } catch (eek) {
     console.log(eek)
-    res
-      .status(500)
-      .send(
-        `<html><body><p>Something went wrong!</p><p>${JSON.stringify(eek)}</p>`
-      )
+    res.send(
+      500,
+      `<html><body><p>Something went wrong!</p><p>${JSON.stringify(eek)}</p>`
+    )
   }
 }
