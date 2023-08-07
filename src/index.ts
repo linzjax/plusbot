@@ -1,3 +1,4 @@
+import SlackREST from "@sagi.io/workers-slack"
 import { Router, listen } from "worktop"
 import faunadb from "faunadb"
 
@@ -6,6 +7,8 @@ import authorize from "./handlers/authorize"
 import addToSlack from "./handlers/addToSlack"
 
 const router = new Router()
+const botAccessToken = SLACK_BOT_ACCESS_TOKEN
+const SlackAPI = new SlackREST({ botAccessToken })
 
 const faunaClient = new faunadb.Client({
   // @ts-ignore
@@ -13,7 +16,7 @@ const faunaClient = new faunadb.Client({
   domain: "db.fauna.com"
 })
 
-router.add("POST", "/plusses", plusses(faunaClient))
+router.add("POST", "/plusses", plusses(SlackAPI, faunaClient))
 
 // new OAuth redirect url
 router.add("GET", "/authorize", authorize)

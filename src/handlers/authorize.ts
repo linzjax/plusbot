@@ -1,10 +1,7 @@
 import SlackREST from "@sagi.io/workers-slack"
 import invariant from "tiny-invariant"
 
-const botAccessToken = SLACK_BOT_ACCESS_TOKEN
-const SlackAPI = new SlackREST({ botAccessToken })
-
-export default async (req, res) => {
+export default (SlackAPI: SlackREST) => async (req, res) => {
   invariant(
     SLACK_CLIENT_ID !== undefined,
     `SLACK_CLIENT_ID is missing.\n
