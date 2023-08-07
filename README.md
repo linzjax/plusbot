@@ -12,3 +12,5 @@ TODOs:
 - [ ] Add unit tests
 - [ ] Clean up code
 - [ ] Set up OAuth
+- [ ] Prevent users from giving themselves plusses
+- [ ] Rename "companies" "teams" to match slacks lingo

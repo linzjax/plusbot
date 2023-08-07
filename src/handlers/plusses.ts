@@ -22,11 +22,11 @@ export default (faunaClient) => async (request, response) => {
         }
       })
 
-    //
     const messages = await Promise.all(
       plussesFor.map(async (user: { username: string; id: string }) => {
         const result = await faunaClient.query(
           q.Call(
+            // This function is stored in the fauna dashboard.
             q.Function("upsertPlusses"),
             q.Match(q.Index("plusses_by_user_id"), user.id),
             user.id,

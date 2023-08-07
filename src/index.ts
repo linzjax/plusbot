@@ -1,6 +1,8 @@
 import { Router, listen } from "worktop"
 import faunadb from "faunadb"
-import { InstallProvider } from "@slack/oauth"
+import { WebClient } from "@slack/web-api"
+
+const client = new WebClient()
 
 import plusses from "./handlers/plusses"
 import authorize from "./handlers/authorize"
@@ -14,18 +16,9 @@ const faunaClient = new faunadb.Client({
   domain: "db.fauna.com"
 })
 
-// initialize the installProvider
-const installer = new InstallProvider({
-  clientId: SLACK_CLIENT_ID as string,
-  clientSecret: SLACK_CLIENT_SECRET as string,
-  stateSecret: "my-state-secret"
-})
-
 router.add("POST", "/plusses", plusses(faunaClient))
 
 // new OAuth redirect url
 router.add("GET", "/authorize", authorize)
-
-router.add("GET", "/", addToSlack(installer))
 
 listen(router.run)
