@@ -81,6 +81,7 @@ export default (SlackAPI: SlackREST, faunaClient: faunadb.Client) =>
         { headers: { "Content-type": "application/json" } }
       )
     } catch (error) {
+      console.log(error)
       const faunaError = getFaunaError(error)
       console.log("An error occurred:", faunaError)
       response.send(faunaError.status, faunaError)
