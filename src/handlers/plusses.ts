@@ -6,7 +6,7 @@ import faunadb from "faunadb"
 export default (SlackAPI: SlackREST, faunaClient: faunadb.Client) =>
   async (request, response) => {
     try {
-      const signingSecret = "foobar" //SLACK_SIGNING_SECRET
+      const signingSecret = SLACK_SIGNING_SECRET
       const isVerifiedRequest = await SlackAPI.helpers.verifyRequestSignature(
         request,
         signingSecret
