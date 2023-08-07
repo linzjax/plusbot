@@ -16,7 +16,7 @@ export default async (req, res) => {
   )
 
   try {
-    console.log(req.query)
+    console.log(req.query.code)
 
     const response = await SlackAPI.oauth.v2.access({
       client_id: SLACK_CLIENT_ID,
