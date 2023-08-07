@@ -7,6 +7,8 @@ export default (SlackAPI: SlackREST, faunaClient: faunadb.Client) =>
   async (request, response) => {
     try {
       const signingSecret = SLACK_SIGNING_SECRET
+      console.log(signingSecret)
+
       const isVerifiedRequest = await SlackAPI.helpers.verifyRequestSignature(
         request,
         signingSecret
@@ -68,6 +70,8 @@ export default (SlackAPI: SlackREST, faunaClient: faunadb.Client) =>
           }
         }
       ]
+
+      console.log(blocks)
 
       return new Response(
         JSON.stringify({
