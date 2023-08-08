@@ -21,6 +21,7 @@ export const getContent = async (request: IRequest) => {
     if (contentType) {
       if (contentType.includes("application/x-www-form-urlencoded")) {
         console.log("made it here")
+        console.log(await request.text())
         request.content = await request.body()
         console.log(request.content)
       }
