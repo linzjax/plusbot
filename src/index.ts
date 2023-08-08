@@ -18,8 +18,8 @@ export const getContent = async (request: IRequest) => {
   request.content = undefined
   try {
     if (contentType) {
-      if (contentType.includes("application/json")) {
-        request.content = await request.json()
+      if (contentType.includes("application/x-www-form-urlencoded")) {
+        request.content = await request.body()
       }
     }
   } catch (err) {} // silently fail on error
