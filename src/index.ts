@@ -50,7 +50,7 @@ router
 export default <ExportedHandler<EnvBindings>>{
   async fetch(request, env, context) {
     try {
-      console.log("ORIGINAL request", request.url)
+      console.log("ORIGINAL request", request.headers.get("content-type"))
       const botAccessToken = env.SLACK_BOT_ACCESS_TOKEN
       const SlackAPI = new SlackREST({ botAccessToken })
 
