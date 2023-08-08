@@ -25,7 +25,7 @@ app.post("/plusses", async (c) => {
   })
 
   const body = await c.req.parseBody()
-  console.log(body)
+  console.log("body:", body)
   return await plusses(body, faunaClient)
 })
 
