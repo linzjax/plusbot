@@ -41,3 +41,4 @@ Things that I've learned along the way:
 
 - @slack/web-api uses axios, which is incompatable with cloudflare workers.
 - worktop, though convenient, does not use traditional request objects, so standard operations like `.clone()` are not available, making it incompatable with @sagi.io/workers-slack 's `verifyRequestSignature` function.
+- Itty-router only parses requests that come in with application/json. Slack sends application/x-www-form-urlencoded
