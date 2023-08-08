@@ -26,21 +26,15 @@ export const getContent = async (request: IRequest) => {
   return request.content
 }
 
-const faunaClient = new faunadb.Client({
-  // @ts-ignore
-  secret: FAUNADB_SECRET as string,
-  domain: "db.fauna.com"
-})
-
 router
-  .all("*", async (request: IRequest, SlackAPI, env) => {
+  .all("*", async (request: IRequest, env, SlackAPI) => {
     const signingSecret = env.SLACK_SIGNING_SECRET
     const isVerifiedRequest = await SlackAPI.helpers.verifyRequestSignature(
       request,
       signingSecret
     )
   })
-  .post("/plusses", async (request) => {
+  .post("/plusses", async (request, env, _, faunaClient) => {
     const content = await getContent(request)
     return await plusses({ content }, faunaClient)
   })
@@ -51,7 +45,7 @@ router
   //   })
 
   // new OAuth redirect url
-  .get("/authorize", async (request, SlackAPI) => {
+  .get("/authorize", async (request, _, SlackAPI) => {
     authorize(request, SlackAPI)
   })
 
@@ -61,7 +55,12 @@ export default <ExportedHandler<EnvBindings>>{
       const botAccessToken = env.SLACK_BOT_ACCESS_TOKEN
       const SlackAPI = new SlackREST({ botAccessToken })
 
-      const response = await router.handle(request, SlackAPI, env, context)
+      const faunaClient = new faunadb.Client({
+        secret: env.FAUNADB_SECRET as string,
+        domain: "db.fauna.com"
+      })
+
+      const response = await router.handle(request, env, SlackAPI, faunaClient)
       return response
     } catch (e) {
       return new Response("Internal error. Contact #engineer-helpdesk.", {
