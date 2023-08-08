@@ -19,6 +19,6 @@ const faunaClient = new faunadb.Client({
 router.add("POST", "/plusses", plusses(SlackAPI, faunaClient))
 
 // new OAuth redirect url
-router.add("GET", "/authorize", authorize)
+router.add("GET", "/authorize", authorize(SlackAPI))
 
 listen(router.run)
