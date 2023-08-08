@@ -43,10 +43,14 @@ router
   .get("/authorize", async (request, env, tools) => {
     authorize(request, env, tools.SlackAPI)
   })
+  .get("*", async (request) => {
+    return new Response("Page not found", { status: 404 })
+  })
 
 export default <ExportedHandler<EnvBindings>>{
   async fetch(request, env, context) {
     try {
+      console.log("ORIGINAL REQUEST", JSON.stringify(request))
       const botAccessToken = env.SLACK_BOT_ACCESS_TOKEN
       const SlackAPI = new SlackREST({ botAccessToken })
 
