@@ -53,13 +53,32 @@ export default async (body: any, faunaClient: faunadb.Client) => {
           ":be_authentic:"
         ]
 
-        const getRandomCoreValue = () => {
-          return coreValues[Math.floor(Math.random() * coreValues.length)]
+        const celebrateEmojis = [
+          ":highfive:",
+          ":dancing-mage:",
+          ":bananadance:",
+          ":party_blob:",
+          ":party_cat:",
+          ":partycorgi:",
+          ":dancing-dog:"
+        ]
+
+        const successMessage = [
+          "Plusses for you",
+          "Way to go",
+          "Rock on",
+          "Keep it up"
+        ]
+
+        const getRandomValue = (array: string[]) => {
+          return array[Math.floor(Math.random() * array.length)]
         }
 
-        return `:sparkles: ${getRandomCoreValue()} :sparkles:   Plusses for you @${
+        return `:sparkles:${getRandomValue(
+          coreValues
+        )}:sparkles:   ${getRandomValue(successMessage)} @${
           user.username
-        }!    :sparkles: :highfive: :sparkles:`
+        }!    :sparkles:${getRandomValue(celebrateEmojis)}:sparkles:`
       })
     )
 
