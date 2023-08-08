@@ -1,7 +1,27 @@
 To push changes to Cloudflare
 
 ```
-wrangler publish
+wrangler deploy
+```
+
+## Body for a slack request
+
+```
+{
+  token: <token>,
+  team_id: <id of the slack team>,
+  team_domain: 'lindseysappfactory',
+  channel_id: <id of the slack channel>,
+  channel_name: 'random',
+  user_id: <user id>,
+  user_name: 'linzjax',
+  command: '/++',
+  text: '<@<user_id>|ljacks>',
+  api_app_id: <api app id>,
+  is_enterprise_install: 'false',
+  response_url: <where to post the response to>,
+  trigger_id: <trigger id string>
+}
 ```
 
 TODOs:

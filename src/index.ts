@@ -1,14 +1,32 @@
 import SlackREST from "@sagi.io/workers-slack"
-import { Router, listen } from "worktop"
+import { Router, IRequest } from "itty-router"
 import faunadb from "faunadb"
 
 import plusses from "./handlers/plusses"
 import authorize from "./handlers/authorize"
 import addToSlack from "./handlers/addToSlack"
 
-const router = new Router()
+const router = Router()
 const botAccessToken = SLACK_BOT_ACCESS_TOKEN
 const SlackAPI = new SlackREST({ botAccessToken })
+
+/**
+ * For some reason, itty-router's withContent doesn't work with the way we've formatted our
+ * handlers. So this is a direct copy of itty router's withContent function that we can use
+ * inside the body of the callback.
+ **/
+export const getContent = async (request: IRequest) => {
+  let contentType = request.headers.get("content-type")
+  request.content = undefined
+  try {
+    if (contentType) {
+      if (contentType.includes("application/json")) {
+        request.content = await request.json()
+      }
+    }
+  } catch (err) {} // silently fail on error
+  return request.content
+}
 
 const faunaClient = new faunadb.Client({
   // @ts-ignore
@@ -16,9 +34,38 @@ const faunaClient = new faunadb.Client({
   domain: "db.fauna.com"
 })
 
-router.add("POST", "/plusses", plusses(SlackAPI, faunaClient))
+router
+  .all("*", async (request: IRequest) => {
+    const signingSecret = SLACK_SIGNING_SECRET
+    const isVerifiedRequest = await SlackAPI.helpers.verifyRequestSignature(
+      request,
+      signingSecret
+    )
+  })
+  .post("/plusses", async (request) => {
+    const content = await getContent(request)
+    return await plusses({ content }, faunaClient)
+  })
 
-// new OAuth redirect url
-router.add("GET", "/authorize", authorize(SlackAPI))
+  // .post('/donotsell/list/add-customer', async (request, env) => {
+  //     const content = await getContent(request)
+  //     return await handleAddOptOutUser({ content }, env)
+  //   })
 
-listen(router.run)
+  // new OAuth redirect url
+  .get("/authorize", async (request) => {
+    authorize(request, SlackAPI)
+  })
+
+export default <ExportedHandler>{
+  async fetch(request, env, context) {
+    try {
+      const response = await router.handle(request, env, context)
+      return response
+    } catch (e) {
+      return new Response("Internal error. Contact #engineer-helpdesk.", {
+        status: 500
+      })
+    }
+  }
+}
