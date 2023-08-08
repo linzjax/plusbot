@@ -43,7 +43,23 @@ export default async (body: any, faunaClient: faunadb.Client) => {
             )
           )
 
-        return `:sparkles: :be_kind: :sparkles:   Plusses for you @${user.username}!    :sparkles: :highfive: :sparkles:`
+        const coreValues = [
+          ":be_kind:",
+          ":bring_the_magic:",
+          ":think_it_through:",
+          ":keep_it_simple:",
+          ":find_a_way:",
+          ":own_it:",
+          ":be_authentic:"
+        ]
+
+        const getRandomCoreValue = () => {
+          return coreValues[Math.floor(Math.random() * coreValues.length)]
+        }
+
+        return `:sparkles: ${getRandomCoreValue()} :sparkles:   Plusses for you @${
+          user.username
+        }!    :sparkles: :highfive: :sparkles:`
       })
     )
 
