@@ -43,7 +43,7 @@ export default async (body: any, faunaClient: faunadb.Client) => {
             )
           )
 
-        return `@${user.username} now has ${userUpdated.plusses} plusses!`
+        return `:sparkles: :be_kind: :sparkles:   Plusses for you @${user.username}!    :sparkles: :highfive: :sparkles:`
       })
     )
 
