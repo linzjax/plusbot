@@ -7,8 +7,6 @@ import authorize from "./handlers/authorize"
 import addToSlack from "./handlers/addToSlack"
 
 const router = Router()
-const botAccessToken = SLACK_BOT_ACCESS_TOKEN
-const SlackAPI = new SlackREST({ botAccessToken })
 
 /**
  * For some reason, itty-router's withContent doesn't work with the way we've formatted our
@@ -35,8 +33,8 @@ const faunaClient = new faunadb.Client({
 })
 
 router
-  .all("*", async (request: IRequest) => {
-    const signingSecret = SLACK_SIGNING_SECRET
+  .all("*", async (request: IRequest, SlackAPI, env) => {
+    const signingSecret = env.SLACK_SIGNING_SECRET
     const isVerifiedRequest = await SlackAPI.helpers.verifyRequestSignature(
       request,
       signingSecret
@@ -53,14 +51,17 @@ router
   //   })
 
   // new OAuth redirect url
-  .get("/authorize", async (request) => {
+  .get("/authorize", async (request, SlackAPI) => {
     authorize(request, SlackAPI)
   })
 
-export default <ExportedHandler>{
+export default <ExportedHandler<EnvBindings>>{
   async fetch(request, env, context) {
     try {
-      const response = await router.handle(request, env, context)
+      const botAccessToken = env.SLACK_BOT_ACCESS_TOKEN
+      const SlackAPI = new SlackREST({ botAccessToken })
+
+      const response = await router.handle(request, SlackAPI, env, context)
       return response
     } catch (e) {
       return new Response("Internal error. Contact #engineer-helpdesk.", {
