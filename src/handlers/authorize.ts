@@ -2,22 +2,22 @@ import SlackREST from "@sagi.io/workers-slack"
 import invariant from "tiny-invariant"
 import { IRequest } from "itty-router"
 
-export default async (request: IRequest, SlackAPI: SlackREST) => {
+export default async (request: IRequest, env, SlackAPI: SlackREST) => {
   invariant(
-    SLACK_CLIENT_ID !== undefined,
+    env.SLACK_CLIENT_ID !== undefined,
     `SLACK_CLIENT_ID is missing.\n
     This can be found under Basic Information -> App Credentials in your bot directory.`
   )
   invariant(
-    SLACK_CLIENT_SECRET !== undefined,
+    env.SLACK_CLIENT_SECRET !== undefined,
     `SLACK_CLIENT_SECRET is missing.\n
     This can be found under Basic Information -> App Credentials in your bot directory.`
   )
 
   try {
     const response = await SlackAPI.oauth.v2.access({
-      client_id: SLACK_CLIENT_ID,
-      client_secret: SLACK_CLIENT_SECRET,
+      client_id: env.SLACK_CLIENT_ID,
+      client_secret: env.SLACK_CLIENT_SECRET,
       code: request.query.get("code")
     })
 
