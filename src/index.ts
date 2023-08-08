@@ -19,14 +19,12 @@ type Bindings = {
 const app = new Hono<{ Bindings: Bindings }>()
 
 app.post("/plusses", async (c) => {
-  console.log("made it here?")
   const faunaClient = new faunadb.Client({
     secret: c.env.FAUNADB_SECRET as string,
     domain: "db.fauna.com"
   })
 
   const body = await c.req.parseBody()
-  console.log("body:", body.text)
   return await plusses(body, faunaClient)
 })
 
@@ -42,17 +40,14 @@ app.get("*", async (request) => {
 
 export default <ExportedHandler<EnvBindings>>{
   async fetch(request, env, context) {
-    console.log("1. fetching")
     try {
       const botAccessToken = env.SLACK_BOT_ACCESS_TOKEN
       const SlackAPI = new SlackREST({ botAccessToken })
-      const signingSecret = env.SLACK_SIGNING_SECRET
+      const signingSecret = "boo!" //env.SLACK_SIGNING_SECRET
       const isVerifiedRequest = await SlackAPI.helpers.verifyRequestSignature(
         request,
         signingSecret
       )
-
-      console.log("isVerifiedRequest?", isVerifiedRequest)
 
       return app.fetch(request, env, context)
     } catch (e) {
