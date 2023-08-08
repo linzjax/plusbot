@@ -44,7 +44,7 @@ export default <ExportedHandler<EnvBindings>>{
   async fetch(request, env, context) {
     console.log("1. fetching")
     try {
-      const botAccessToken = c.env.SLACK_BOT_ACCESS_TOKEN
+      const botAccessToken = env.SLACK_BOT_ACCESS_TOKEN
       const SlackAPI = new SlackREST({ botAccessToken })
       const signingSecret = env.SLACK_SIGNING_SECRET
       const isVerifiedRequest = await SlackAPI.helpers.verifyRequestSignature(
@@ -56,6 +56,7 @@ export default <ExportedHandler<EnvBindings>>{
 
       return app.fetch(request, env, context)
     } catch (e) {
+      console.log(e)
       return new Response("Internal error. Contact #engineer-helpdesk.", {
         status: 500
       })
