@@ -1,4 +1,5 @@
 import SlackREST from "@sagi.io/workers-slack"
+// https://hono.dev/
 import { Hono } from "hono"
 import faunadb from "faunadb"
 
@@ -43,7 +44,10 @@ export default <ExportedHandler<EnvBindings>>{
     try {
       const botAccessToken = env.SLACK_BOT_ACCESS_TOKEN
       const SlackAPI = new SlackREST({ botAccessToken })
-      const signingSecret = "boo!" //env.SLACK_SIGNING_SECRET
+
+      // If this is not a valid request from slack, it will throw an error.
+      // Otherwise, isVerifiedRequest is true
+      const signingSecret = env.SLACK_SIGNING_SECRET
       const isVerifiedRequest = await SlackAPI.helpers.verifyRequestSignature(
         request,
         signingSecret
