@@ -60,7 +60,8 @@ export default async (body: any, faunaClient: faunadb.Client) => {
           ":party_blob:",
           ":party_cat:",
           ":partycorgi:",
-          ":dancing-dog:"
+          ":dancing-dog:",
+          ":mario_luigi:"
         ]
 
         const successMessage = [
