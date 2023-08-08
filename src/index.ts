@@ -19,6 +19,7 @@ type Bindings = {
 const app = new Hono<{ Bindings: Bindings }>()
 
 app.post("/plusses", async (c) => {
+  console.log("made it here?")
   const faunaClient = new faunadb.Client({
     secret: c.env.FAUNADB_SECRET as string,
     domain: "db.fauna.com"
