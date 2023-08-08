@@ -6,7 +6,7 @@ import faunadb from "faunadb"
 export default (SlackAPI: SlackREST, faunaClient: faunadb.Client) =>
   async (request, response) => {
     try {
-      console.log(JSON.stringify(request))
+      // console.log(JSON.stringify(request))
       const newRequest = request.clone()
       console.log(newRequest)
       throw new Error("oh no!")
