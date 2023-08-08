@@ -15,11 +15,14 @@ const router = Router()
  **/
 export const getContent = async (request: IRequest) => {
   let contentType = request.headers.get("content-type")
+  console.log("contentType:", contentType)
   request.content = undefined
   try {
     if (contentType) {
       if (contentType.includes("application/x-www-form-urlencoded")) {
+        console.log("made it here")
         request.content = await request.body()
+        console.log(request.content)
       }
     }
   } catch (err) {} // silently fail on error
@@ -28,7 +31,7 @@ export const getContent = async (request: IRequest) => {
 
 router
   .post("/plusses", async (request, env, tools) => {
-    console.log("REQUEST", JSON.stringify(request))
+    // console.log("REQUEST", JSON.stringify(request))
     const content = await getContent(request)
     console.log(`CONTENT:`, content)
     return await plusses({ content }, tools.faunaClient)
