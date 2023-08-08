@@ -2,12 +2,12 @@ import { getFaunaError, getId, getDataField } from "../faunaUtils"
 import invariant from "tiny-invariant"
 import faunadb from "faunadb"
 
-export default async ({ content }: any, faunaClient: faunadb.Client) => {
+export default async (body: any, faunaClient: faunadb.Client) => {
   try {
     const q = faunadb.query
 
     // Parse body of the message to see the users that were tagged for plusses
-    const plussesFor = content.text
+    const plussesFor = body.text
       .split(" ")
       .filter((user: string) => user.includes("<@"))
       .map((user: string) => {
@@ -27,7 +27,7 @@ export default async ({ content }: any, faunaClient: faunadb.Client) => {
             q.Match(q.Index("plusses_by_user_id"), user.id),
             user.id,
             user.username,
-            content.team_id
+            body.team_id
           )
         )
 
