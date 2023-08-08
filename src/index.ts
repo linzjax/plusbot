@@ -36,7 +36,7 @@ router
       )
   })
   .post("/plusses", async (request, env, tools) => {
-    console.log("REQUEST", request)
+    console.log("REQUEST", JSON.stringify(request))
     const content = await getContent(request)
     console.log(`CONTENT:`, content)
     return await plusses({ content }, tools.faunaClient)
