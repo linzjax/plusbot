@@ -42,6 +42,7 @@ app.get("*", async (request) => {
 
 export default <ExportedHandler<EnvBindings>>{
   async fetch(request, env, context) {
+    console.log("1. fetching")
     try {
       const botAccessToken = c.env.SLACK_BOT_ACCESS_TOKEN
       const SlackAPI = new SlackREST({ botAccessToken })
