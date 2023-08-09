@@ -20,15 +20,12 @@ type Bindings = {
 const app = new Hono<{ Bindings: Bindings }>()
 
 app.post("/plusses", async (c) => {
-  console.log("step route for plusses")
   const faunaClient = new faunadb.Client({
     secret: c.env.FAUNADB_SECRET as string,
     domain: "db.fauna.com"
   })
 
-  console.log("faunadb connected")
   const body = await c.req.parseBody()
-  console.log("body parsed:", body)
   return await plusses(body, faunaClient)
 })
 
