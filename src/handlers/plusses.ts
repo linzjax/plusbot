@@ -99,12 +99,12 @@ export default async (body: any, faunaClient: Client) => {
         console.log("find query:", findQuery)
         const response: QuerySuccess<User> = await q(findQuery)
         console.log("response:", JSON.stringify(response))
-        const userDoc: User = response.data
-        console.log("userDoc", userDoc)
+        // const userDoc: User = response.data
+        // console.log("userDoc", userDoc)
 
-        const updateQuery = fql`${findQuery}!.update({ plusses: ${userDoc.plusses}})`
+        // const updateQuery = fql`${findQuery}!.update({ plusses: ${userDoc.plusses}})`
 
-        await faunaClient.query(updateQuery)
+        // await faunaClient.query(updateQuery)
 
         return `:sparkles:${getRandomValue(coreValues)}:sparkles:   ${
           isBirthdayMessage
