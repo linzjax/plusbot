@@ -92,7 +92,7 @@ export default async (body: any, faunaClient: Client) => {
         // Check if the user_id exists at all
         // If it does, increase the number of plusses by 1
         // If it does not, create a record for the user
-
+        console.log(user.id, body.team_id)
         const findQuery = fql`Plusses.firstWhere(.user_id == ${user.id} && .company == companies.firstWhere(.data.id == ${body.team_id}))`
         const response = await faunaClient.query(findQuery)
         console.log("response:", JSON.stringify(response))
