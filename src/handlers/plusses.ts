@@ -66,7 +66,7 @@ const parseUsers = (text: string) => {
     })
 }
 
-const isBirthdayMessage = (text: string) => {
+const parseBirthdayMessage = (text: string) => {
   return /happy birthday|hbd/.test(text.toLowerCase())
 }
 
@@ -79,6 +79,7 @@ export default async (body: any, faunaClient: faunadb.Client) => {
     const q = faunadb.query
 
     const plussesFor = parseUsers(body.text)
+    const isBirthdayMessage = parseBirthdayMessage(body.text)
 
     const messages = await Promise.all(
       plussesFor.map(async (user: { username: string; id: string }) => {
@@ -106,7 +107,7 @@ export default async (body: any, faunaClient: faunadb.Client) => {
           )
 
         return `:sparkles:${getRandomValue(coreValues)}:sparkles:   ${
-          isBirthdayMessage(body.text)
+          isBirthdayMessage
             ? getRandomValue(birthdayMessages)
             : getRandomValue(successMessage)
         } @${user.username}!    :sparkles:${getRandomValue(
