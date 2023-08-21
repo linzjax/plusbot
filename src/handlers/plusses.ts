@@ -99,7 +99,7 @@ export default async (body: any, faunaClient: Client) => {
         const userDoc = response.data
         // console.log("userDoc", userDoc)
 
-        const updateQuery = fql`${findQuery}!.update({ plusses: ${userDoc.plusses}})`
+        const updateQuery = fql`${findQuery}!.update({ plusses: ${userDoc.plusses} + 1})`
 
         // await faunaClient.query(updateQuery)
 
