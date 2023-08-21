@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@sagi.io/workers-slack": "^0.0.55",
+    "fauna": "^1.0.1",
     "faunadb": "^4.7.0",
     "hono": "^3.4.1",
     "qs": "^6.11.0",

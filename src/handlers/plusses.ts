@@ -1,6 +1,14 @@
 import { getFaunaError, getId, getDataField } from "../faunaUtils"
+import { Client, fql, FaunaError, QuerySuccess, Document } from "fauna"
 import invariant from "tiny-invariant"
-import faunadb from "faunadb"
+// import faunadb from "faunadb"
+
+type User = {
+  user_id: string
+  username: string
+  company: Document
+  plusses: number
+}
 
 const coreValues = [
   ":be_kind:",
@@ -74,37 +82,27 @@ const getRandomValue = (array: string[]) => {
   return array[Math.floor(Math.random() * array.length)]
 }
 
-export default async (body: any, faunaClient: faunadb.Client) => {
+export default async (body: any, faunaClient: Client) => {
   try {
-    const q = faunadb.query
-
     const plussesFor = parseUsers(body.text)
     const isBirthdayMessage = parseBirthdayMessage(body.text)
 
+    const q = faunaClient.query
+
     const messages = await Promise.all(
       plussesFor.map(async (user: { username: string; id: string }) => {
-        const result = await faunaClient.query(
-          q.Call(
-            // This function is stored in the fauna dashboard.
-            q.Function("upsertPlusses"),
-            q.Match(q.Index("plusses_by_user_id"), user.id),
-            user.id,
-            user.username,
-            body.team_id
-          )
-        )
+        // Check if the user_id exists at all
+        // If it does, increase the number of plusses by 1
+        // If it does not, create a record for the user
 
-        const userUpdated: { [plusses: string]: number } =
-          await faunaClient.query(
-            q.Let(
-              {
-                u: q.Get(q.Match(q.Index("plusses_by_user_id"), user.id))
-              },
-              {
-                plusses: getDataField("u", "plusses")
-              }
-            )
-          )
+        const findQuery = fql`plusses.firstWhere((u) => u.user_id == ${user.id} && u.company == companies.firstWhere((c) => c.data.id == ${body.team_id}))`
+
+        const response: QuerySuccess<User> = await q(findQuery)
+        const userDoc: User = response.data
+
+        const updateQuery = fql`${findQuery}!.update({ plusses: ${userDoc.plusses}})`
+
+        await faunaClient.query(updateQuery)
 
         return `:sparkles:${getRandomValue(coreValues)}:sparkles:   ${
           isBirthdayMessage

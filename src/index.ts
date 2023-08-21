@@ -1,7 +1,8 @@
 import SlackREST from "@sagi.io/workers-slack"
 // https://hono.dev/
 import { Hono } from "hono"
-import faunadb from "faunadb"
+import { Client } from "fauna"
+// import faunadb from "faunadb"
 
 import plusses from "./handlers/plusses"
 import authorize from "./handlers/authorize"
@@ -20,9 +21,8 @@ type Bindings = {
 const app = new Hono<{ Bindings: Bindings }>()
 
 app.post("/plusses", async (c) => {
-  const faunaClient = new faunadb.Client({
-    secret: c.env.FAUNADB_SECRET as string,
-    domain: "db.fauna.com"
+  const faunaClient = new Client({
+    secret: c.env.FAUNADB_SECRET as string
   })
 
   const body = await c.req.parseBody()
