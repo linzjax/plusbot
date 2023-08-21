@@ -96,9 +96,10 @@ export default async (body: any, faunaClient: Client) => {
         // If it does not, create a record for the user
 
         const findQuery = fql`plusses.firstWhere((u) => u.user_id == ${user.id} && u.company == companies.firstWhere((c) => c.data.id == ${body.team_id}))`
-
+        console.log("find query:", findQuery)
         const response: QuerySuccess<User> = await q(findQuery)
         const userDoc: User = response.data
+        console.log("userDoc", userDoc)
 
         const updateQuery = fql`${findQuery}!.update({ plusses: ${userDoc.plusses}})`
 
