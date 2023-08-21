@@ -87,17 +87,15 @@ export default async (body: any, faunaClient: Client) => {
     const plussesFor = parseUsers(body.text)
     const isBirthdayMessage = parseBirthdayMessage(body.text)
 
-    const q = faunaClient.query
-
     const messages = await Promise.all(
       plussesFor.map(async (user: { username: string; id: string }) => {
         // Check if the user_id exists at all
         // If it does, increase the number of plusses by 1
         // If it does not, create a record for the user
 
-        const findQuery = fql`plusses.all()`
+        const findQuery = fql`Collection.create({ name: "Test" })`
         console.log("find query:", findQuery)
-        const response: QuerySuccess<User> = await q(findQuery)
+        const response: QuerySuccess<User> = await faunaClient.query(findQuery)
         console.log("response:", response)
         // const userDoc: User = response.data
         // console.log("userDoc", userDoc)
