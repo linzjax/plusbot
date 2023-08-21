@@ -98,7 +98,7 @@ export default async (body: any, faunaClient: Client) => {
         const findQuery = fql`plusses.firstWhere((u) => u.user_id == ${user.id} && u.company == companies.firstWhere((c) => c.data.id == ${body.team_id}))`
         console.log("find query:", findQuery)
         const response: QuerySuccess<User> = await q(findQuery)
-        console.log("response:", JSON.stringify(response))
+        console.log("response:", response)
         // const userDoc: User = response.data
         // console.log("userDoc", userDoc)
 
