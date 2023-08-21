@@ -94,12 +94,12 @@ export default async (body: any, faunaClient: Client) => {
         // If it does not, create a record for the user
         console.log(user.id, body.team_id)
         const findQuery = fql`plusses.firstWhere(.user_id == ${user.id} && .company == companies.firstWhere(.data.id == ${body.team_id}))`
-        const response = await faunaClient.query(findQuery)
+        const response: QuerySuccess<User> = await faunaClient.query(findQuery)
         console.log("response:", JSON.stringify(response))
-        // const userDoc: User = response.data
+        const userDoc = response.data
         // console.log("userDoc", userDoc)
 
-        // const updateQuery = fql`${findQuery}!.update({ plusses: ${userDoc.plusses}})`
+        const updateQuery = fql`${findQuery}!.update({ plusses: ${userDoc.plusses}})`
 
         // await faunaClient.query(updateQuery)
 
