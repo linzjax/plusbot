@@ -101,7 +101,8 @@ export default async (body: any, faunaClient: Client) => {
 
         const updateQuery = fql`${findQuery}!.update({ plusses: ${userDoc.plusses} + 1})`
 
-        // await faunaClient.query(updateQuery)
+        const result = await faunaClient.query(updateQuery)
+        console.log("result:", JSON.stringify(result))
 
         return `:sparkles:${getRandomValue(coreValues)}:sparkles:   ${
           isBirthdayMessage
