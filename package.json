@@ -17,7 +17,8 @@
   "private": true,
   "scripts": {
     "start": "wrangler dev",
-    "deploy": "wrangler publish"
+    "deploy": "wrangler deploy",
+    "deploy-dev": "wrangler deploy --env=dev"
   },
   "dependencies": {
     "@sagi.io/workers-slack": "^0.0.55",

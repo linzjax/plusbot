@@ -2,3 +2,9 @@ name = "plusbot"
 main = "src/index.ts"
 compatibility_date = "2022-10-07"
 node_compat = true
+
+[env.prod]
+name = "plusbot"
+
+[env.dev]
+name = "plusbot-dev"

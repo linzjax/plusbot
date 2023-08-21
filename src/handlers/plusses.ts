@@ -17,6 +17,7 @@ const celebrateEmojis = [
   ":dancing-mage:",
   ":bananadance:",
   ":party_blob:",
+  ":party-blob:",
   ":party_cat:",
   ":partycorgi:",
   ":dancing-dog:",
@@ -37,6 +38,15 @@ const successMessage = [
   "You're doing great"
 ]
 
+const birthdayMessages = [
+  "Let's celebrate you",
+  "It's your special day",
+  "Let's party",
+  "Happiest of birthdays",
+  "Happy level-up day",
+  "A day just for you"
+]
+
 /***
  * Parse body of the message to see the users that were tagged for plusses
  **/
@@ -54,6 +64,10 @@ const parseUsers = (text: string) => {
         username: username
       }
     })
+}
+
+const isBirthdayMessage = (text: string) => {
+  return /happy birthday|hbd/.test(text.toLowerCase())
 }
 
 const getRandomValue = (array: string[]) => {
@@ -91,11 +105,13 @@ export default async (body: any, faunaClient: faunadb.Client) => {
             )
           )
 
-        return `:sparkles:${getRandomValue(
-          coreValues
-        )}:sparkles:   ${getRandomValue(successMessage)} @${
-          user.username
-        }!    :sparkles:${getRandomValue(celebrateEmojis)}:sparkles:`
+        return `:sparkles:${getRandomValue(coreValues)}:sparkles:   ${
+          isBirthdayMessage(body.text)
+            ? getRandomValue(birthdayMessages)
+            : getRandomValue(successMessage)
+        } @${user.username}!    :sparkles:${getRandomValue(
+          celebrateEmojis
+        )}:sparkles:`
       })
     )
 
