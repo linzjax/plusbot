@@ -1,6 +1,14 @@
 import { getFaunaError, getId, getDataField } from "../faunaUtils"
+import {
+  Client,
+  fql,
+  FaunaError,
+  QuerySuccess,
+  QueryValue,
+  Document
+} from "fauna"
 import invariant from "tiny-invariant"
-import faunadb from "faunadb"
+import { User, SlackMessage } from "../types"
 
 const coreValues = [
   ":be_kind:",
@@ -74,38 +82,40 @@ const getRandomValue = (array: string[]) => {
   return array[Math.floor(Math.random() * array.length)]
 }
 
-export default async (body: any, faunaClient: faunadb.Client) => {
+export default async (body: SlackMessage, faunaClient: Client) => {
   try {
-    const q = faunadb.query
-
     const plussesFor = parseUsers(body.text)
     const isBirthdayMessage = parseBirthdayMessage(body.text)
 
     const messages = await Promise.all(
       plussesFor.map(async (user: { username: string; id: string }) => {
-        const result = await faunaClient.query(
-          q.Call(
-            // This function is stored in the fauna dashboard.
-            q.Function("upsertPlusses"),
-            q.Match(q.Index("plusses_by_user_id"), user.id),
-            user.id,
-            user.username,
-            body.team_id
-          )
-        )
+        /**
+         * First - check if the user exists
+         **/
+        const findQuery = fql`plusses.firstWhere(.user_id == ${user.id} && .company == companies.firstWhere(.data.id == ${body.team_id}))`
+        const response: QuerySuccess<User> = await faunaClient.query(findQuery)
+        const userDoc = response.data
+        /**
+         * If the user exists - increase the number of plusses.
+         * If the user does NOT exist - create the user and give them a plus.
+         **/
+        let updateQuery
+        if (userDoc) {
+          updateQuery = fql`${findQuery}!.update({ plusses: ${userDoc.plusses} + 1})`
+        } else {
+          updateQuery = fql`plusses.create({
+            username: ${user.username},
+            user_id: ${user.id},
+            plusses: 1,
+            company: companies.firstWhere(.data.id == ${body.team_id})
+          })`
+        }
+        await faunaClient.query(updateQuery)
 
-        const userUpdated: { [plusses: string]: number } =
-          await faunaClient.query(
-            q.Let(
-              {
-                u: q.Get(q.Match(q.Index("plusses_by_user_id"), user.id))
-              },
-              {
-                plusses: getDataField("u", "plusses")
-              }
-            )
-          )
-
+        /**
+         * Generate a celebrate message based on provided core value emojis, standard or birthday
+         * messaging, and provided celebrate emojis.
+         **/
         return `:sparkles:${getRandomValue(coreValues)}:sparkles:   ${
           isBirthdayMessage
             ? getRandomValue(birthdayMessages)

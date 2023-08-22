@@ -1,6 +1,8 @@
-import { Select, Var, Expr } from "faunadb"
-
-export function getFaunaError(error) {
+export function getFaunaError(error: {
+  requestResult: {
+    responseContent: { errors: [{ code: string; description: string }] }
+  }
+}) {
   const { code, description } = error.requestResult.responseContent.errors[0]
   let status
 
@@ -25,16 +27,3 @@ export function getFaunaError(error) {
 
   return { code, description, status }
 }
-
-export const getId = (variable: string | Expr) => {
-  return Select(["ref", "id"], Var(variable))
-}
-
-export const getDataField = (
-  variable: string | Expr,
-  field: string | null = null
-) => {
-  return Select(["data", field], Var(variable))
-}
-
-export default getFaunaError
