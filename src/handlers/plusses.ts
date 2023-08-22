@@ -89,44 +89,33 @@ export default async (body: any, faunaClient: Client) => {
 
     const messages = await Promise.all(
       plussesFor.map(async (user: { username: string; id: string }) => {
-        // Check if the user_id exists at all
-        // If it does, increase the number of plusses by 1
-        // If it does not, create a record for the user
-        const combinedQuery = fql`
-          if (plusses.firstWhere(.user_id == ${user.id} && .company == companies.firstWhere(.data.id == ${body.team_id})).exists()) {
-            let user = plusses.firstWhere(.user_id == ${user.id} && .company == companies.firstWhere(.data.id == ${body.team_id}))
-            plusses.firstWhere(.user_id == ${user.id} && .company == companies.firstWhere(.data.id == ${body.team_id}))!.update({ "plusses": user.data.plusses + 1 })
-          } else {
-            plusses.create({
-              username: ${user.username},
-              user_id: ${user.id},
-              plusses: 1,
-              company: companies.firstWhere(.data.id == ${body.team_id})
-            })
-          }
-        `
+        /**
+         * First - check if the user exists
+         **/
+        const findQuery = fql`plusses.firstWhere(.user_id == ${user.id} && .company == companies.firstWhere(.data.id == ${body.team_id}))`
+        const response: QuerySuccess<User> = await faunaClient.query(findQuery)
+        const userDoc = response.data
+        /**
+         * If the user exists - increase the number of plusses.
+         * If the user does NOT exist - create the user and give them a plus.
+         **/
+        let updateQuery
+        if (userDoc) {
+          updateQuery = fql`${findQuery}!.update({ plusses: ${userDoc.plusses} + 1})`
+        } else {
+          updateQuery = fql`plusses.create({
+            username: ${user.username},
+            user_id: ${user.id},
+            plusses: 1,
+            company: companies.firstWhere(.data.id == ${body.team_id})
+          })`
+        }
+        await faunaClient.query(updateQuery)
 
-        // const findQuery = fql`plusses.firstWhere(.user_id == ${user.id} && .company == companies.firstWhere(.data.id == ${body.team_id}))`
-        // const response: QuerySuccess<User> = await faunaClient.query(findQuery)
-        // const userDoc = response.data
-        // /**
-        //  * TODO: Check if user exists. If not create it
-        //  **/
-        // let updateQuery
-        // if (userDoc) {
-        //   updateQuery = fql`${findQuery}!.update({ plusses: ${userDoc.plusses} + 1})`
-        // } else {
-        //   updateQuery = fql`plusses.create({
-        //     username: ${user.username},
-        //     user_id: ${user.id},
-        //     plusses: 1,
-        //     company: companies.firstWhere(.data.id == ${body.team_id})
-        //   })`
-        // }
-
-        const result = await faunaClient.query(combinedQuery)
-        console.log(JSON.stringify(result.data))
-
+        /**
+         * Generate a celebrate message based on provided core value emojis, standard or birthday
+         * messaging, and provided celebrate emojis.
+         **/
         return `:sparkles:${getRandomValue(coreValues)}:sparkles:   ${
           isBirthdayMessage
             ? getRandomValue(birthdayMessages)
