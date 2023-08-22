@@ -2,7 +2,6 @@ import SlackREST from "@sagi.io/workers-slack"
 // https://hono.dev/
 import { Hono } from "hono"
 import { Client } from "fauna"
-// import faunadb from "faunadb"
 
 import plusses from "./handlers/plusses"
 import authorize from "./handlers/authorize"
