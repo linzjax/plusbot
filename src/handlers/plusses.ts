@@ -1,14 +1,14 @@
 import { getFaunaError, getId, getDataField } from "../faunaUtils"
-import { Client, fql, FaunaError, QuerySuccess, Document } from "fauna"
+import {
+  Client,
+  fql,
+  FaunaError,
+  QuerySuccess,
+  QueryValue,
+  Document
+} from "fauna"
 import invariant from "tiny-invariant"
-// import faunadb from "faunadb"
-
-type User = {
-  user_id: string
-  username: string
-  company: Document
-  plusses: number
-}
+import { User, SlackMessage } from "../types"
 
 const coreValues = [
   ":be_kind:",
@@ -82,7 +82,7 @@ const getRandomValue = (array: string[]) => {
   return array[Math.floor(Math.random() * array.length)]
 }
 
-export default async (body: any, faunaClient: Client) => {
+export default async (body: SlackMessage, faunaClient: Client) => {
   try {
     const plussesFor = parseUsers(body.text)
     const isBirthdayMessage = parseBirthdayMessage(body.text)
