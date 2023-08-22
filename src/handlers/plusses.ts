@@ -92,12 +92,10 @@ export default async (body: any, faunaClient: Client) => {
         // Check if the user_id exists at all
         // If it does, increase the number of plusses by 1
         // If it does not, create a record for the user
-        const lookupQuery = fql`plusses.firstWhere(.user_id == ${user.id} && .company == companies.firstWhere(.data.id == ${body.team_id}))`
-
         const combinedQuery = fql`
-          if (lookupQuery.exists()) {
-            let user = lookupQuery
-            lookupQuery!.update({ "plusses": user.data.plusses + 1 })
+          if (plusses.firstWhere(.user_id == ${user.id} && .company == companies.firstWhere(.data.id == ${body.team_id})).exists()) {
+            let user = plusses.firstWhere(.user_id == ${user.id} && .company == companies.firstWhere(.data.id == ${body.team_id}))
+            plusses.firstWhere(.user_id == ${user.id} && .company == companies.firstWhere(.data.id == ${body.team_id}))!.update({ "plusses": user.data.plusses + 1 })
           } else {
             plusses.create({
               username: ${user.username},
