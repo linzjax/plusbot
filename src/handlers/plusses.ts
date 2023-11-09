@@ -1,13 +1,5 @@
-import { getFaunaError, getId, getDataField } from "../faunaUtils"
-import {
-  Client,
-  fql,
-  FaunaError,
-  QuerySuccess,
-  QueryValue,
-  Document
-} from "fauna"
-import invariant from "tiny-invariant"
+import { getFaunaError } from "../faunaUtils"
+import { Client, fql, QuerySuccess } from "fauna"
 import { User, SlackMessage } from "../types"
 
 const coreValues = [
@@ -89,28 +81,28 @@ export default async (body: SlackMessage, faunaClient: Client) => {
 
     const messages = await Promise.all(
       plussesFor.map(async (user: { username: string; id: string }) => {
-        /**
-         * First - check if the user exists
-         **/
-        const findQuery = fql`plusses.firstWhere(.user_id == ${user.id} && .company == companies.firstWhere(.data.id == ${body.team_id}))`
-        const response: QuerySuccess<User> = await faunaClient.query(findQuery)
-        const userDoc = response.data
-        /**
-         * If the user exists - increase the number of plusses.
-         * If the user does NOT exist - create the user and give them a plus.
-         **/
-        let updateQuery
-        if (userDoc) {
-          updateQuery = fql`${findQuery}!.update({ plusses: ${userDoc.plusses} + 1})`
-        } else {
-          updateQuery = fql`plusses.create({
-            username: ${user.username},
-            user_id: ${user.id},
-            plusses: 1,
-            company: companies.firstWhere(.data.id == ${body.team_id})
-          })`
-        }
-        await faunaClient.query(updateQuery)
+        // /**
+        //  * First - check if the user exists
+        //  **/
+        // const findQuery = fql`plusses.firstWhere(.user_id == ${user.id} && .company == companies.firstWhere(.data.id == ${body.team_id}))`
+        // const response: QuerySuccess<User> = await faunaClient.query(findQuery)
+        // const userDoc = response.data
+        // /**
+        //  * If the user exists - increase the number of plusses.
+        //  * If the user does NOT exist - create the user and give them a plus.
+        //  **/
+        // let updateQuery
+        // if (userDoc) {
+        //   updateQuery = fql`${findQuery}!.update({ plusses: ${userDoc.plusses} + 1})`
+        // } else {
+        //   updateQuery = fql`plusses.create({
+        //     username: ${user.username},
+        //     user_id: ${user.id},
+        //     plusses: 1,
+        //     company: companies.firstWhere(.data.id == ${body.team_id})
+        //   })`
+        // }
+        // await faunaClient.query(updateQuery)
 
         /**
          * Generate a celebrate message based on provided core value emojis, standard or birthday
@@ -145,10 +137,11 @@ export default async (body: SlackMessage, faunaClient: Client) => {
     )
   } catch (error) {
     console.log(error)
-    const faunaError = getFaunaError(error)
-    console.log("An error occurred:", faunaError)
-    return new Response(JSON.stringify(faunaError), {
-      status: faunaError.status
-    })
+    return new Response(JSON.stringify(error), { status: 500 })
+    // const faunaError = getFaunaError(error)
+    // console.log("An error occurred:", faunaError)
+    // return new Response(JSON.stringify(faunaError), {
+    // status: faunaError.status
+    // })
   }
 }
