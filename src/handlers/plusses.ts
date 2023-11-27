@@ -3,13 +3,13 @@ import { Client, fql, QuerySuccess } from "fauna"
 import { User, SlackMessage } from "../types"
 
 const coreValues = [
-  ":be_kind:",
-  ":bring_the_magic:",
-  ":think_it_through:",
-  ":keep_it_simple:",
-  ":find_a_way:",
-  ":own_it:",
-  ":be_authentic:"
+  ":be-kind:",
+  ":bring-the-magic:",
+  ":think-it-through:",
+  ":keep-it-simple:",
+  ":find-a-way:",
+  ":own-it:",
+  ":be-authentic:"
 ]
 
 const celebrateEmojis = [
@@ -67,7 +67,7 @@ const parseUsers = (text: string) => {
 }
 
 const parseBirthdayMessage = (text: string) => {
-  return /happy birthday|hbd/.test(text.toLowerCase())
+  return /happy birthday|hbd|happy belated birthday/.test(text.toLowerCase())
 }
 
 const getRandomValue = (array: string[]) => {
