@@ -22,13 +22,53 @@ Use the `/++` command to indicate that this is a plusbot command. After that tag
 
 Currently you can clone this repo, update the emoji's and personal messages to whatever best fits your organization. From there you can deploy it to a Cloudflare worker, and set up your own custom Slackbot.
 
+### Initial Setup
+
+1. Clone the repo
+
+#### Cloudflare
+
+Create two new cloudflare workers
+
+1. plusbot
+1. plusbot-dev (If you're doing active development, I'd suggest creating a separate slack where you can test out features.)
+
+#### Create a new Slack app
+
+1. Go to permissions and install in your workspace
+2. Add a new redirect url that matches the cloudflare worker:
+   ```
+   https://plusbot.[your-user-name].workers.dev/authorize
+   ```
+3. Give it bot token scopes [chat:write, commands]
+4. Go to Slash Commands and add `/++` as a new command.
+5. Give it a fun picture and description if you want!
+
+#### Cloudflare variables
+
+1. Go back into your cloudflare workers and add the variables found in [env.example](./env.example).
+
+> Note: All of the values in ### CUSTOMIZATIONS #### can be changed to whatever makes sense for you and your organization! Pick emojis that your company uses frequently, use kudos messages that makes sense for your vibe, go wild.
+
+2. There's information in env.example for where to find the Slack variables that are needed.
+
+> Note: All the slack variables should be Encrypted in cloudflare.
+
 ## To push changes to Cloudflare
 
 ```
-wrangler deploy
+# for your dev environment:
+npm run deploy-dev
+
+# for deploying to prod:
+npm run deploy
 ```
 
-## Body for a slack request
+## Internal notes.
+
+You can read if you want, but these were mostly for me :)
+
+### Body for a slack request
 
 ```
 {
@@ -48,11 +88,7 @@ wrangler deploy
 }
 ```
 
-## TODOs:
-
-- [ ] Pull out list of emojis so that they are easier to customize
-- [ ] Write out setup instructions
-
+### TODOs:
 
 - [ ] Add companies if they don't exist
 - [ ] Print out a help message if there's no user tagged in the message
@@ -63,7 +99,7 @@ wrangler deploy
 - [ ] Prevent users from giving themselves plusses
 - [ ] Rename "companies" "teams" to match slacks lingo
 
-## Breadcrumbs
+### Breadcrumbs
 
 Things that I've learned along the way:
 
