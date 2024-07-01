@@ -1,4 +1,14 @@
-To push changes to Cloudflare
+# Plus Bot
+
+Plus Bot is a slack bot that allows you to give kudos and sparkles to folks. No real world value, just good vibes ✨
+
+<img width="396" alt="Showing plusbot: /++ great job on that presentation @ljacks! PlusBot: Rock on @ljacks!" src="https://github.com/linzjax/plusbot/assets/8128188/bd2da145-2684-4876-844c-ff23ac308ae8">
+
+## Current State
+
+Currently you can clone this repo, update the emoji's and personal messages to whatever best fits your organization. From there you can deploy it to a Cloudflare worker, and set up your own custom Slackbot.
+
+## To push changes to Cloudflare
 
 ```
 wrangler deploy
@@ -24,7 +34,11 @@ wrangler deploy
 }
 ```
 
-TODOs:
+## TODOs:
+
+- [ ] Pull out list of emojis so that they are easier to customize
+- [ ] Write out setup instructions
+
 
 - [ ] Add companies if they don't exist
 - [ ] Print out a help message if there's no user tagged in the message
@@ -35,7 +49,7 @@ TODOs:
 - [ ] Prevent users from giving themselves plusses
 - [ ] Rename "companies" "teams" to match slacks lingo
 
-### Breadcrumbs
+## Breadcrumbs
 
 Things that I've learned along the way:
 
