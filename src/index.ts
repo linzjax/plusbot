@@ -5,35 +5,36 @@ import { Client } from "fauna"
 
 import plusses from "./handlers/plusses"
 import authorize from "./handlers/authorize"
-import addToSlack from "./handlers/addToSlack"
-
-type Bindings = {
-  SLACK_WEBHOOK_URL: string
-  SLACK_SIGNING_SECRET: string
-  SLACK_CLIENT_ID: string
-  SLACK_CLIENT_SECRET: string
-  SLACK_BOT_ACCESS_TOKEN: string
-  FAUNADB_SECRET: string
-  FAUNADB_ENDPOINT: string
-}
+import { SlackMessage, Bindings } from "./types"
 
 const app = new Hono<{ Bindings: Bindings }>()
 
 app.post("/plusses", async (c) => {
-  const faunaClient = new Client({
-    secret: c.env.FAUNADB_SECRET as string
-  })
-
+  const frontEmojis = c.env.FRONT_EMOJIS?.split("\n") || [":heart:"]
+  const backEmojis = c.env.BACK_EMOJIS?.split("\n") || [":tada:"]
+  const kudosMessages = c.env.KUDOS_MESSAGES?.split("\n") || ["Way to go"]
+  const bdayMessages = c.env.BDAY_MESSAGES?.split("\n") || [
+    "Let's celebrate you"
+  ]
   const body = await c.req.parseBody()
-  return await plusses(body, faunaClient)
+  return await plusses(
+    body as SlackMessage,
+    frontEmojis,
+    backEmojis,
+    kudosMessages,
+    bdayMessages
+  )
 })
 
-// new OAuth redirect url
+/**
+ * new OAuth redirect url
+ **/
 app.get("/authorize", async (c) => {
   const botAccessToken = c.env.SLACK_BOT_ACCESS_TOKEN
   const SlackAPI = new SlackREST({ botAccessToken })
   authorize(c.req, c.env, SlackAPI)
 })
+
 app.get("*", async (request) => {
   return new Response("Page not found", { status: 404 })
 })

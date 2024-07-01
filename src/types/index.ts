@@ -1,6 +1,4 @@
-import { QueryValueObject } from "fauna"
-
-export interface User extends QueryValueObject {
+export interface User {
   user_id: string
   username: string
   company: string
@@ -21,4 +19,16 @@ export type SlackMessage = {
   is_enterprise_install: string
   response_url: string
   trigger_id: string
+}
+
+export type Bindings = {
+  KUDOS_MESSAGES: string
+  BDAY_MESSAGES: string
+  FRONT_EMOJIS: string
+  BACK_EMOJIS: string
+  SLACK_WEBHOOK_URL: string
+  SLACK_SIGNING_SECRET: string
+  SLACK_CLIENT_ID: string
+  SLACK_CLIENT_SECRET: string
+  SLACK_BOT_ACCESS_TOKEN: string
 }
