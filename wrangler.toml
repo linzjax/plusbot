@@ -8,3 +8,38 @@ name = "plusbot"
 
 [env.dev]
 name = "plusbot-dev"
+
+[vars]
+BACK_EMOJIS = """:highfive:
+:dancing-mage:
+:bananadance:
+:party_blob:
+:party-blob:
+:party_cat:
+:partycorgi:
+:dancing-dog:
+:mario_luigi:
+:party-doge:
+:party_parrot:
+:excited:
+:more_cowbell:"""
+BDAY_MESSAGES = """Let's celebrate you
+It's your special day
+Let's party
+Happiest of birthdays
+Happy level-up day
+A day just for you"""
+FRONT_EMOJIS = """:be-kind:
+:bring-the-magic:
+:think-it-through:
+:keep-it-simple:
+:find-a-way:
+:own-it:
+:be-authentic:"""
+KUDOS_MESSAGES = """Plusses for you
+Way to go
+Rock on
+Keep it up
+High five
+Look at you go
+You're doing great"""
