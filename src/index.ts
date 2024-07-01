@@ -1,7 +1,8 @@
+// ts is complaining about not finding this package, but it exists.
+// @ts-ignore
 import SlackREST from "@sagi.io/workers-slack"
 // https://hono.dev/
 import { Hono } from "hono"
-import { Client } from "fauna"
 
 import plusses from "./handlers/plusses"
 import authorize from "./handlers/authorize"

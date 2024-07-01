@@ -1,51 +1,4 @@
-import { getFaunaError } from "../faunaUtils"
-import { Client, fql, QuerySuccess } from "fauna"
-import { User, SlackMessage } from "../types"
-
-const coreValues = [
-  ":be-kind:",
-  ":bring-the-magic:",
-  ":think-it-through:",
-  ":keep-it-simple:",
-  ":find-a-way:",
-  ":own-it:",
-  ":be-authentic:"
-]
-
-const celebrateEmojis = [
-  ":highfive:",
-  ":dancing-mage:",
-  ":bananadance:",
-  ":party_blob:",
-  ":party-blob:",
-  ":party_cat:",
-  ":partycorgi:",
-  ":dancing-dog:",
-  ":mario_luigi:",
-  ":party-doge:",
-  ":party_parrot:",
-  ":excited:",
-  ":more_cowbell:"
-]
-
-const successMessage = [
-  "Plusses for you",
-  "Way to go",
-  "Rock on",
-  "Keep it up",
-  "High five",
-  "Look at you go",
-  "You're doing great"
-]
-
-const birthdayMessages = [
-  "Let's celebrate you",
-  "It's your special day",
-  "Let's party",
-  "Happiest of birthdays",
-  "Happy level-up day",
-  "A day just for you"
-]
+import { SlackMessage } from "../types"
 
 /***
  * Parse body of the message to see the users that were tagged for plusses
@@ -126,10 +79,5 @@ export default async (
   } catch (error) {
     console.log(error)
     return new Response(JSON.stringify(error), { status: 500 })
-    // const faunaError = getFaunaError(error)
-    // console.log("An error occurred:", faunaError)
-    // return new Response(JSON.stringify(faunaError), {
-    // status: faunaError.status
-    // })
   }
 }
