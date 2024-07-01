@@ -1,8 +1,13 @@
 import SlackREST from "@sagi.io/workers-slack"
 import invariant from "tiny-invariant"
 import { IRequest } from "itty-router"
+import { Bindings } from "../types"
 
-export default async (request: IRequest, env, SlackAPI: SlackREST) => {
+export default async (
+  request: IRequest,
+  env: Bindings,
+  SlackAPI: SlackREST
+) => {
   invariant(
     env.SLACK_CLIENT_ID !== undefined,
     `SLACK_CLIENT_ID is missing.\n
