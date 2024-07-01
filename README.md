@@ -4,6 +4,20 @@ Plus Bot is a slack bot that allows you to give kudos and sparkles to folks. No 
 
 <img width="396" alt="Showing plusbot: /++ great job on that presentation @ljacks! PlusBot: Rock on @ljacks!" src="https://github.com/linzjax/plusbot/assets/8128188/bd2da145-2684-4876-844c-ff23ac308ae8">
 
+<img width="422" alt="/++ @ljacks @linzjax Amazing work team! PlusBot: High five @ljacks! Keep it up @linzjax!" src="https://github.com/linzjax/plusbot/assets/8128188/e030c53c-605b-4c75-b505-8dd413b80c3f">
+
+## Usage
+
+Use the `/++` command to indicate that this is a plusbot command. After that tag as many users as you'd like and let others know what a good job they did! Then let the sparkles flow.
+
+```
+/++ @user hey good job!
+// plusbot will respond with a good job message
+
+/++ Happy birthday @user!
+// plusbot will respond with a happy birthday message.
+```
+
 ## Current State
 
 Currently you can clone this repo, update the emoji's and personal messages to whatever best fits your organization. From there you can deploy it to a Cloudflare worker, and set up your own custom Slackbot.
